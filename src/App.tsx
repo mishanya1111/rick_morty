@@ -10,7 +10,6 @@ function App() {
         <button className="px-4 py-2 bg-blue-500 text-white rounded mr-2" onClick={increment}>+</button>
         <button className="px-4 py-2 bg-red-500 text-white rounded" onClick={decrement}>-</button>
       </div>
-      )
       <h1 className="text-3xl font-bold underline">
         Hello world!
       </h1>
