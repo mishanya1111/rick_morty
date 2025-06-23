@@ -1,10 +1,13 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet } from "react-router-dom";
+import { NavBar } from "../../components/NavBar";
 
 const Root = () => {
   return (
     <div>
-      <header>Header (например, навигация)</header>
-      <main>
+      <header>
+        <NavBar />
+      </header>
+      <main className="mx-10 my-4">
         <Outlet />
       </main>
     </div>

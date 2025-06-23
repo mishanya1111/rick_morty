@@ -1,7 +1,14 @@
 // src/router/Router.tsx
 import { createBrowserRouter, Form, RouterProvider } from "react-router-dom";
 import Root from "./Root/Root";
-import Filters from "../components/Filters";
+import Filters from "../pages/Filters";
+import Home from "../pages/Home";
+import CharactersList from "../pages/CharactersList";
+import History from "../pages/History";
+import { SignIn } from "../pages/SignIn";
+import { SignUp } from "../pages/SignUp";
+import CharacterDetail from "../pages/CharacterDetail";
+import Favorites from "../pages/Favorites";
 
 const router = createBrowserRouter([
   {
@@ -15,17 +22,33 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <div>base</div>,
+            element: <Home />,
           },
           {
             path: "/search",
-            element: <div>Search</div>,
+            element: <CharactersList />,
           },
         ],
       },
       {
-        path: "/search",
-        element: <div></div>,
+        path: "/signin",
+        element: <SignIn />,
+      },
+      {
+        path: "/signup",
+        element: <SignUp />,
+      },
+      {
+        path: "/characters/:id",
+        element: <CharacterDetail />,
+      },
+      {
+        path: "/history",
+        element: <History />,
+      },
+      {
+        path: "/favorites",
+        element: <Favorites />,
       },
     ],
   },

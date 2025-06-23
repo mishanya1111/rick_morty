@@ -3,14 +3,10 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import AppRouter from "../src/router/Router";
 import App from "./App";
-import Filters from "./components/Filters.tsx";
+import Filters from "./pages/Filters.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    {/* <div className="m-5">
-      <Filters/>
-    </div> */}
-    {/*<App/>*/}
     <AppRouter />
   </StrictMode>
 );

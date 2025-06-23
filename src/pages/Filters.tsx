@@ -26,37 +26,25 @@ export default function Filters() {
     gender: searchParams.get("gender") || "",
   };
 
-  // Считываем фильтры из URL и делаем запрос
-  /*useEffect(() => {
-    const name = searchParams.get("name") || "";
-    const status = searchParams.get("status") || "";
-    const gender = searchParams.get("gender") || "";
+  // const fetchCharacters = ({ name, status, gender }: Filters) => {
+  //   const params = new URLSearchParams();
+  //   if (name) params.append("name", name);
+  //   if (status) params.append("status", status);
+  //   if (gender) params.append("gender", gender);
 
-    const urlFilters = { name, status, gender };
-    setFilters(urlFilters);
-    fetchCharacters(urlFilters);
-  }, [location.search]); // вызывается при изменении строки запроса
-  */
+  //   const url = `https://rickandmortyapi.com/api/character/?${params.toString()}`;
+  //   console.log("🔍 Fetch URL:", url);
 
-  const fetchCharacters = ({ name, status, gender }: Filters) => {
-    const params = new URLSearchParams();
-    if (name) params.append("name", name);
-    if (status) params.append("status", status);
-    if (gender) params.append("gender", gender);
+  //   fetch(url)
+  //     .then((res) => {
+  //       if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  //       return res.json();
+  //     })
+  //     .then((data) => console.log("✅ Data received:", data))
+  //     .catch((err) => console.error("❌ Fetch error:", err));
+  // };
 
-    const url = `https://rickandmortyapi.com/api/character/?${params.toString()}`;
-    console.log("🔍 Fetch URL:", url);
-
-    fetch(url)
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
-      })
-      .then((data) => console.log("✅ Data received:", data))
-      .catch((err) => console.error("❌ Fetch error:", err));
-  };
-
-  fetchCharacters(filters);
+  // fetchCharacters(filters);
 
   const updateFilters = (key: keyof Filters, value: string) => {
     const newFilters = { ...filters, [key]: value };
@@ -70,7 +58,10 @@ export default function Filters() {
     if (newFilters.gender) params.set("gender", newFilters.gender);
 
     // Навигация с новым query
-    navigate({ pathname: location.pathname, search: params.toString() });
+    navigate({
+      pathname: "/search/",
+      search: params.toString(),
+    });
   };
 
   return (
@@ -110,6 +101,7 @@ export default function Filters() {
           ))}
         </select>
       </div>
+
       <Outlet />
     </>
   );
