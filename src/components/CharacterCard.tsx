@@ -1,41 +1,49 @@
 import { Link } from "react-router-dom";
-import type { Character } from "../constants/types";
 import hearth from "../assets/heart.png";
+import heartFilled from "../assets/heart-filled.png";
 import { useAuthStore } from "../store/authStore";
+import { toggleFavorite } from "../utils/favorites";
+import type { Character } from "../constants/types";
+import { useState } from "react";
+
+interface Props extends Character {
+  buttonVisibility?: boolean;
+  onFavoriteToggle?: (userId: string, id: number) => void;
+}
 
 export default function CharacterCard({
   name,
   image,
   species,
   id,
+  onFavoriteToggle = toggleFavorite,
   buttonVisibility = true,
-}: Character) {
+  isFavorite = false,
+}: Props) {
   const userId = useAuthStore((state) => state.userId);
-  const handleAddToFavorites = () => {
+  const [fav, setFav] = useState(isFavorite);
+
+  const handleFavoriteClick = () => {
     if (!userId) return;
-
-    const favData = JSON.parse(localStorage.getItem("favorites") || "{}");
-    let userFavorites = favData[userId] || [];
-
-    // Проверим, добавлен ли уже
-    const exists = userFavorites.some((item: any) => item.id === id);
-    if (!exists) {
-      userFavorites.push({ id, favoritedAt: new Date().toISOString() });
-      favData[userId] = userFavorites;
-      localStorage.setItem("favorites", JSON.stringify(favData));
-    }
+    onFavoriteToggle(userId, id);
+    setFav((prev) => !prev);
   };
 
   return (
     <div className="border rounded-xl shadow p-4 flex flex-col items-center gap-2 relative">
       {buttonVisibility && (
         <button
-          onClick={handleAddToFavorites}
+          onClick={handleFavoriteClick}
           className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:text-accent-foreground h-9 w-9 absolute z-10 top-5 right-5 rounded-full text-red-500 transition-all hover:bg-red-500/10 active:bg-red-500/30"
         >
-          <img src={hearth} alt="значёк сердца для подписки" />
+          <img
+            src={fav ? heartFilled : hearth}
+            alt="значок избранного"
+            className="w-6 h-6"
+          />
         </button>
       )}
+
       <img
         src={image}
         alt={name}

@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams, useLocation } from "react-router-dom";
 import CharacterCard from "../components/CharacterCard";
 import type { Character, Filters } from "../constants/types";
 import { useAuthStore } from "../store/authStore";
+import { markFavorites } from "../utils/favorites";
+import { URL_CHARACTER } from "../constants/URL";
 
 export default function CharactersList() {
   const [searchParams] = useSearchParams();
@@ -11,7 +13,6 @@ export default function CharactersList() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const userId = useAuthStore((state) => state.userId);
-  console.log(characters);
 
   const filters: Filters = {
     name: searchParams.get("name") || "",
@@ -25,17 +26,25 @@ export default function CharactersList() {
     if (status) params.append("status", status);
     if (gender) params.append("gender", gender);
 
-    const url = `https://rickandmortyapi.com/api/character/?${params.toString()}`;
     setLoading(true);
     setError("");
 
     try {
-      const res = await fetch(url);
+      const res = await fetch(URL_CHARACTER + `?${params.toString()}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
-      setCharacters(data.results || []);
+
+      const rawCharacters: Character[] = data.results || [];
+
+      let marked = userId
+        ? markFavorites(rawCharacters, userId)
+        : rawCharacters;
+      if (!Array.isArray(marked)) {
+        marked = [marked];
+      }
+      setCharacters(marked);
     } catch (err: any) {
-      console.log(err);
+      console.error(err);
       setError(err.message);
       setCharacters([]);
     } finally {
@@ -45,7 +54,7 @@ export default function CharactersList() {
 
   useEffect(() => {
     fetchCharacters(filters);
-  }, [location.search]);
+  }, [location.search, userId]);
 
   return (
     <div className="mt-6">
@@ -56,7 +65,12 @@ export default function CharactersList() {
         }`}
       >
         {characters.map((char) => (
-          <CharacterCard key={char.id} {...char} buttonVisibility={!!userId} />
+          <CharacterCard
+            key={char.id}
+            {...char}
+            buttonVisibility={!!userId}
+            isFavorite={char.isFavorite}
+          />
         ))}
       </div>
     </div>

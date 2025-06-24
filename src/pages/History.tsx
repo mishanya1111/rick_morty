@@ -2,10 +2,14 @@ import { useEffect, useState } from "react";
 import CharacterCard from "../components/CharacterCard";
 import type { Character } from "../constants/types";
 import { useAuthStore } from "../store/authStore";
+import { markFavorites } from "../utils/favorites";
+import { URL_CHARACTER } from "../constants/URL";
 
 export default function History() {
   const userId = useAuthStore((state) => state.userId);
-  const [characters, setCharacters] = useState<Character[]>([]);
+  const [characters, setCharacters] = useState<
+    (Character & { isFavorite?: boolean })[]
+  >([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -22,30 +26,24 @@ export default function History() {
     userHistory = userHistory.sort(
       (a, b) => new Date(b.viewedAt).getTime() - new Date(a.viewedAt).getTime()
     );
-    console.log(userHistory);
 
-    // Получаем массив id в правильном порядке
-    const ids: number[] = userHistory.map((entry: { id: number }) => entry.id);
+    const ids = userHistory.map((entry) => entry.id);
     if (ids.length === 0) return;
-    // console.log(ids);
 
     const fetchHistoryCharacters = async () => {
       try {
         setLoading(true);
 
-        const res = await fetch(
-          `https://rickandmortyapi.com/api/character/${ids.join(",")}`
-        );
+        const res = await fetch(URL_CHARACTER + ids.join(","));
         const data = await res.json();
         const results: Character[] = Array.isArray(data) ? data : [data];
-        //console.log(results);
 
-        // Восстанавливаем порядок по ids
         const ordered = ids
           .map((id) => results.find((char) => char.id === id))
           .filter(Boolean) as Character[];
 
-        setCharacters(ordered);
+        const marked = markFavorites(ordered, userId);
+        setCharacters(marked);
       } catch (e) {
         console.error(e);
       } finally {
@@ -66,7 +64,12 @@ export default function History() {
         }`}
       >
         {characters.map((char) => (
-          <CharacterCard key={char.id} {...char} />
+          <CharacterCard
+            key={char.id}
+            {...char}
+            isFavorite={char.isFavorite}
+            buttonVisibility={!!userId}
+          />
         ))}
       </div>
     </div>

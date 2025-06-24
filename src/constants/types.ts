@@ -4,6 +4,7 @@ export interface Character {
   image: string;
   species: string;
   buttonVisibility?: boolean;
+  isFavorite?: boolean;
 }
 
 export interface Filters {
