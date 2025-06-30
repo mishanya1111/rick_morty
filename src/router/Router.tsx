@@ -1,5 +1,5 @@
 // src/router/Router.tsx
-import { createBrowserRouter, Form, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from "./Root/Root";
 import Filters from "../pages/Filters";
 import Home from "../pages/Home";
@@ -9,6 +9,7 @@ import { SignIn } from "../pages/SignIn";
 import { SignUp } from "../pages/SignUp";
 import CharacterDetail from "../pages/CharacterDetail";
 import Favorites from "../pages/Favorites";
+import Tag from "../pages/Tag";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
       {
         path: "/favorites",
         element: <Favorites />,
+      },
+      {
+        path: "/tag",
+        element: <Tag />,
       },
     ],
   },

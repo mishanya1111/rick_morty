@@ -32,6 +32,8 @@ export default function CharacterDetail() {
       setLoading(false);
 
       if (userId) {
+        setFav(isFavorite(userId, data.id));
+
         const history = JSON.parse(localStorage.getItem("history") || "{}");
         let userHistory = history[userId] || [];
 
@@ -51,8 +53,6 @@ export default function CharacterDetail() {
 
         history[userId] = userHistory;
         localStorage.setItem("history", JSON.stringify(history));
-
-        setFav(isFavorite(userId, data.id));
       }
     };
 

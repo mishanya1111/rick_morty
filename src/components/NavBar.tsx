@@ -1,5 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
+import icon from "../assets/rick_morty_icon.png";
 
 function NavLink({
   to,
@@ -37,7 +38,7 @@ export function NavBar() {
     <nav className="flex justify-between items-center px-8 py-4 border-b shadow-sm">
       {/* Logo */}
       <Link to="/" className="text-xl font-bold">
-        REACT-39
+        <img src={icon} className="h-12" alt="icom rick & morty" />
       </Link>
 
       {/* Right-side links */}
@@ -52,6 +53,9 @@ export function NavBar() {
           </NavLink>
         ) : (
           <>
+            <NavLink to="/tag/" isActive={isActive("/tag/")}>
+              Tag
+            </NavLink>
             <NavLink to="/history/" isActive={isActive("/history/")}>
               History
             </NavLink>
