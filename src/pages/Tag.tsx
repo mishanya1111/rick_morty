@@ -12,10 +12,14 @@ const doublerArraytoArray = (mas: Mas): (string | null)[] => {
   return result;
 };
 
-export default function Tag() {
-  const [mas, setMas] = useState<Mas>([[], [], [], []]);
+export default function Tag({ tagSize = 3 }: { tagSize?: number }) {
+  console.log(tagSize);
 
-  useEffect(() => reset(), []);
+  const [mas, setMas] = useState<Mas>(
+    Array.from({ length: tagSize }, () => [])
+  );
+
+  const [moves, setMoves] = useState(0);
 
   const generateRandomBoard = (size: number): (string | null)[][] => {
     const values: (string | null)[] = Array.from(
@@ -43,6 +47,7 @@ export default function Tag() {
     while (!checkСorrectness(newMas)) {
       newMas = generateRandomBoard(mas.length);
     }
+    setMoves(0);
     setMas(newMas);
   };
 
@@ -67,6 +72,7 @@ export default function Tag() {
         nj < newMas.length &&
         newMas[ni][nj] === null
       ) {
+        setMoves((mov) => mov + 1);
         newMas[ni][nj] = newMas[i][j];
         newMas[i][j] = null;
         setMas(newMas);
@@ -75,14 +81,51 @@ export default function Tag() {
     }
   };
 
+  const moveByKey = (key: string) => {
+    const directions: Record<string, [number, number]> = {
+      ArrowUp: [1, 0],
+      ArrowDown: [-1, 0],
+      ArrowLeft: [0, 1],
+      ArrowRight: [0, -1],
+    };
+
+    if (!(key in directions)) return;
+
+    const size = mas.length;
+    let emptyI = -1;
+    let emptyJ = -1;
+
+    for (let i = 0; i < size; i++) {
+      for (let j = 0; j < size; j++) {
+        if (mas[i][j] === null) {
+          emptyI = i;
+          emptyJ = j;
+          break;
+        }
+      }
+    }
+
+    const [di, dj] = directions[key];
+    const ni = emptyI + di;
+    const nj = emptyJ + dj;
+
+    if (ni >= 0 && ni < size && nj >= 0 && nj < size) {
+      setMoves((mov) => mov + 1);
+      const newMas = mas.map((row) => row.slice());
+      newMas[emptyI][emptyJ] = newMas[ni][nj];
+      newMas[ni][nj] = null;
+      setMas(newMas);
+    }
+  };
+
   const checkWin = (mas: Mas): boolean => {
     let prev;
     let cur;
     const arr = doublerArraytoArray(mas);
     for (let i = 0; i < arr.length; i++) {
+      if (i == arr.length - 1) return true;
       prev = cur;
       cur = arr[i];
-      if (i == arr.length - 1) return true;
       if (Number(cur) < Number(prev)) return false;
     }
     return true;
@@ -90,25 +133,43 @@ export default function Tag() {
 
   const checkСorrectness = (mas: Mas): boolean => {
     const arr = doublerArraytoArray(mas);
-    let collision = 0;
+    let inversion = 0;
 
     for (let i = 0; i < arr.length - 1; i++) {
       for (let j = i + 1; j < arr.length - 1; j++) {
         if (Number(arr[i]) > Number(arr[j])) {
-          collision++;
+          inversion++;
         }
       }
     }
 
     if (mas.length % 2 == 0) {
-      if ((collision + 1) % 2 == 1) return true;
+      if ((inversion + 1) % 2 == 1) return true;
       else return false;
     } else {
-      return collision % 2 == 0;
+      return inversion % 2 == 0;
     }
   };
-  const tagLen = mas.length;
-  const win = mas[tagLen - 1][tagLen - 1] === null ? checkWin(mas) : false;
+
+  useEffect(() => {
+    let newMas = generateRandomBoard(tagSize);
+    while (!checkСorrectness(newMas)) {
+      newMas = generateRandomBoard(tagSize);
+    }
+    setMoves(0);
+    setMas(newMas);
+  }, [tagSize]);
+
+  const win = checkWin(mas);
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      moveByKey(e.key);
+    };
+
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [mas, win]);
 
   return (
     <div className="m-6">
@@ -119,6 +180,7 @@ export default function Tag() {
         >
           Reset
         </button>
+        <div className="mb-4 px-4 py-2"> Moves: {moves}</div>
         {win && <div className="mb-4 px-4 py-2"> Win</div>}
       </div>
 
