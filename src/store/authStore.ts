@@ -14,8 +14,7 @@ export const useAuthStore = create<AuthState>()(
       logout: () => set({ userId: null }),
     }),
     {
-      name: "auth-storage", // ключ в localStorage
-      // можно также настроить storage, partialize и т.д.
+      name: "auth-storage",
     }
   )
 );

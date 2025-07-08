@@ -28,7 +28,7 @@ export default function Filters() {
     if (newFilters.gender) params.set("gender", newFilters.gender);
 
     navigate({
-      pathname: "/search/",
+      pathname: "/",
       search: params.toString(),
     });
   };

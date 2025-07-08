@@ -12,9 +12,7 @@ const doublerArraytoArray = (mas: Mas): (string | null)[] => {
   return result;
 };
 
-export default function Tag({ tagSize = 3 }: { tagSize?: number }) {
-  console.log(tagSize);
-
+export default function Tag({ tagSize = 4 }: { tagSize?: number }) {
   const [mas, setMas] = useState<Mas>(
     Array.from({ length: tagSize }, () => [])
   );
@@ -171,6 +169,12 @@ export default function Tag({ tagSize = 3 }: { tagSize?: number }) {
     return () => window.removeEventListener("keydown", handleKey);
   }, [mas, win]);
 
+  const flatMas = doublerArraytoArray(mas);
+  const size = mas.length;
+  const tileSize = 48;
+  const gap = 4;
+  const totalSize = tileSize + gap;
+
   return (
     <div className="m-6">
       <div className="flex">
@@ -185,7 +189,39 @@ export default function Tag({ tagSize = 3 }: { tagSize?: number }) {
       </div>
 
       <div className={win ? "opacity-70" : ""}>
-        <table className="border-collapse border border-gray-400">
+        <div
+          className={`relative ${win ? "opacity-70" : ""}`}
+          style={{
+            width: `${size * totalSize}px`,
+            height: `${size * totalSize}px`,
+          }}
+        >
+          {flatMas.map((cell, index) => {
+            if (cell === null) return null;
+
+            const row = Math.floor(index / size);
+            const col = index % size;
+
+            return (
+              <div
+                key={cell}
+                className="absolute flex items-center justify-center bg-blue-500 text-white rounded cursor-pointer transition-transform duration-300"
+                style={{
+                  width: `${tileSize}px`,
+                  height: `${tileSize}px`,
+                  transform: `translate(${col * totalSize}px, ${
+                    row * totalSize
+                  }px)`,
+                }}
+                onClick={() => handleClick(row, col)}
+              >
+                {cell}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* <table className="border-collapse border border-gray-400">
           <tbody>
             {mas.map((row, rowIndex) => (
               <tr key={rowIndex}>
@@ -203,7 +239,7 @@ export default function Tag({ tagSize = 3 }: { tagSize?: number }) {
               </tr>
             ))}
           </tbody>
-        </table>
+        </table> */}
       </div>
     </div>
   );

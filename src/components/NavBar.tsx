@@ -43,7 +43,7 @@ export function NavBar() {
 
       {/* Right-side links */}
       <div className="flex space-x-6 items-center">
-        <NavLink to="/search/" isActive={isActive("/search/")}>
+        <NavLink to="/" isActive={isActive("/")}>
           Search
         </NavLink>
 

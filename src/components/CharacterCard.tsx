@@ -55,13 +55,12 @@ export default function CharacterCard({
           {species}
         </span>
       </div>
-      {buttonVisibility && (
-        <Link to={`/characters/${id}`} className="mt-2 w-full">
-          <button className="w-full bg-gray-200 hover:bg-gray-300 px-4 py-1 rounded text-sm">
-            READ MORE
-          </button>
-        </Link>
-      )}
+
+      <Link to={`/characters/${id}`} className="mt-2 w-full">
+        <button className="w-full bg-gray-200 hover:bg-gray-300 px-4 py-1 rounded text-sm">
+          READ MORE
+        </button>
+      </Link>
     </div>
   );
 }
