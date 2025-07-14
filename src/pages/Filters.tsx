@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import { Outlet, useNavigate, useSearchParams } from "react-router-dom";
 
 const statusOptions = ["alive", "dead", "unknown"];
@@ -11,13 +12,15 @@ interface Filters {
 
 export default function Filters() {
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-
   const filters = {
     name: searchParams.get("name") || "",
     status: searchParams.get("status") || "",
     gender: searchParams.get("gender") || "",
   };
+  const [name, setName] = useState(filters.name);
+
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const navigate = useNavigate();
 
   const updateFilters = (key: keyof Filters, value: string) => {
     const newFilters = { ...filters, [key]: value };
@@ -33,14 +36,23 @@ export default function Filters() {
     });
   };
 
+  const handleChangeName = (newName: string) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    setName(newName);
+    timeoutRef.current = setTimeout(() => {
+      updateFilters("name", newName);
+    }, 500);
+  };
   return (
     <>
       <div className="flex gap-4">
         <input
           type="text"
           placeholder="Search..."
-          value={filters.name}
-          onChange={(e) => updateFilters("name", e.target.value)}
+          value={name}
+          onChange={(e) => handleChangeName(e.target.value)}
           className="border p-2 rounded flex-1"
         />
 

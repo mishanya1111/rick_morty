@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useSearchParams, useLocation } from "react-router-dom";
-import CharacterCard from "../components/CharacterCard";
+import CharacterCard from "./CharacterCard";
 import type { Character, Filters } from "../constants/types";
 import { useAuthStore } from "../store/authStore";
 import { markFavorites } from "../utils/favorites";
@@ -42,6 +42,7 @@ export default function CharactersList() {
         const data = await res.json();
 
         const rawCharacters: Character[] = data.results || [];
+
         let marked = userId
           ? markFavorites(rawCharacters, userId)
           : rawCharacters;
@@ -69,7 +70,8 @@ export default function CharactersList() {
   useEffect(() => {
     setCharacters([]);
     fetchCharacters();
-  }, [location.search, userId, fetchCharacters]);
+    setNextPageUrl(null);
+  }, [location.search, fetchCharacters]);
 
   useEffect(() => {
     const target = observerRef.current;

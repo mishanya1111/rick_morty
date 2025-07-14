@@ -1,13 +1,12 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from "./Root/Root";
-import Filters from "../pages/Filters";
-import CharactersList from "../pages/CharactersList";
 import History from "../pages/History";
 import { SignIn } from "../pages/SignIn";
 import { SignUp } from "../pages/SignUp";
 import Favorites from "../pages/Favorites";
 import { TagPage } from "../pages/TagPage";
 import CharacterDetail from "../pages/CharacterDetail";
+import Home from "../pages/Home";
 
 const router = createBrowserRouter([
   {
@@ -17,13 +16,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <Filters />,
-        children: [
-          {
-            index: true,
-            element: <CharactersList />,
-          },
-        ],
+        element: <Home />,
       },
       {
         path: "/signin",
