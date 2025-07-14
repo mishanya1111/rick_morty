@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type Mas = (string | null)[][];
 
@@ -79,42 +79,45 @@ export default function Tag({ tagSize = 4 }: { tagSize?: number }) {
     }
   };
 
-  const moveByKey = (key: string) => {
-    const directions: Record<string, [number, number]> = {
-      ArrowUp: [1, 0],
-      ArrowDown: [-1, 0],
-      ArrowLeft: [0, 1],
-      ArrowRight: [0, -1],
-    };
+  const moveByKey = useCallback(
+    (key: string) => {
+      const directions: Record<string, [number, number]> = {
+        ArrowUp: [1, 0],
+        ArrowDown: [-1, 0],
+        ArrowLeft: [0, 1],
+        ArrowRight: [0, -1],
+      };
 
-    if (!(key in directions)) return;
+      if (!(key in directions)) return;
 
-    const size = mas.length;
-    let emptyI = -1;
-    let emptyJ = -1;
+      const size = mas.length;
+      let emptyI = -1;
+      let emptyJ = -1;
 
-    for (let i = 0; i < size; i++) {
-      for (let j = 0; j < size; j++) {
-        if (mas[i][j] === null) {
-          emptyI = i;
-          emptyJ = j;
-          break;
+      for (let i = 0; i < size; i++) {
+        for (let j = 0; j < size; j++) {
+          if (mas[i][j] === null) {
+            emptyI = i;
+            emptyJ = j;
+            break;
+          }
         }
       }
-    }
 
-    const [di, dj] = directions[key];
-    const ni = emptyI + di;
-    const nj = emptyJ + dj;
+      const [di, dj] = directions[key];
+      const ni = emptyI + di;
+      const nj = emptyJ + dj;
 
-    if (ni >= 0 && ni < size && nj >= 0 && nj < size) {
-      setMoves((mov) => mov + 1);
-      const newMas = mas.map((row) => row.slice());
-      newMas[emptyI][emptyJ] = newMas[ni][nj];
-      newMas[ni][nj] = null;
-      setMas(newMas);
-    }
-  };
+      if (ni >= 0 && ni < size && nj >= 0 && nj < size) {
+        setMoves((mov) => mov + 1);
+        const newMas = mas.map((row) => row.slice());
+        newMas[emptyI][emptyJ] = newMas[ni][nj];
+        newMas[ni][nj] = null;
+        setMas(newMas);
+      }
+    },
+    [mas]
+  );
 
   const checkWin = (mas: Mas): boolean => {
     let prev;
@@ -167,7 +170,7 @@ export default function Tag({ tagSize = 4 }: { tagSize?: number }) {
 
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [mas, win]);
+  }, [mas, win, moveByKey]);
 
   const flatMas = doublerArraytoArray(mas);
   const size = mas.length;

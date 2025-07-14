@@ -5,6 +5,11 @@ import { useAuthStore } from "../store/authStore";
 import { markFavorites } from "../utils/favorites";
 import { URL_CHARACTER } from "../constants/URL";
 
+export interface HistoryRecord {
+  id: number;
+  viewedAt: string;
+}
+
 export default function History() {
   const userId = useAuthStore((state) => state.userId);
   const [characters, setCharacters] = useState<
@@ -16,10 +21,7 @@ export default function History() {
     if (!userId) return;
 
     const historyData = JSON.parse(localStorage.getItem("history") || "{}");
-    let userHistory = (historyData[userId] || []) as {
-      id: number;
-      viewedAt: string;
-    }[];
+    let userHistory = (historyData[userId] || []) as HistoryRecord[];
 
     if (userHistory.length === 0) return;
 

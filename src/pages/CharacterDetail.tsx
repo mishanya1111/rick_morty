@@ -5,6 +5,7 @@ import { isFavorite, toggleFavorite } from "../utils/favorites";
 import heart from "../assets/heart.png";
 import heartFilled from "../assets/heart-filled.png";
 import { URL_CHARACTER } from "../constants/URL";
+import type { HistoryRecord } from "./History";
 
 interface CharacterData {
   id: number;
@@ -35,10 +36,10 @@ export default function CharacterDetail() {
         setFav(isFavorite(userId, data.id));
 
         const history = JSON.parse(localStorage.getItem("history") || "{}");
-        let userHistory = history[userId] || [];
+        const userHistory = (history[userId] || []) as HistoryRecord[];
 
         const existingIndex = userHistory.findIndex(
-          (entry: any) => entry.id === data.id
+          (entry) => entry.id === data.id
         );
         const newEntry = {
           id: data.id,

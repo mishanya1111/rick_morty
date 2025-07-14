@@ -51,7 +51,7 @@ export default function CharacterCard({
       />
       <div className="flex w-full justify-between">
         <p className="text-lg font-semibold">{name}</p>
-        <span className="bg-black text-white text-xs px-2 py-1 rounded">
+        <span className="bg-black text-white text-xs px-2 py-1 rounded flex text-center items-center">
           {species}
         </span>
       </div>

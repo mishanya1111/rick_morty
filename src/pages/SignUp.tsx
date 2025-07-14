@@ -73,7 +73,6 @@ export function SignUp() {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
   } = useForm<FormData>({
     resolver: zodResolver(schema),
   });

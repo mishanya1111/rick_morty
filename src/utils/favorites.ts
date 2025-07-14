@@ -1,5 +1,3 @@
-import type { Character } from "../constants/types";
-
 const STORAGE_KEY = "favorites";
 
 function getFavorites(userId: string): { id: number; favoritedAt: string }[] {
@@ -31,14 +29,12 @@ function saveFavorites(
 export function toggleFavorite(userId: string, id: number): void {
   if (!userId) return;
 
-  let favorites = getFavorites(userId);
+  const favorites = getFavorites(userId);
   const index = favorites.findIndex((item) => item.id === id);
 
   if (index !== -1) {
-    // Удаляем из избранного
     favorites.splice(index, 1);
   } else {
-    // Добавляем
     favorites.push({ id, favoritedAt: new Date().toISOString() });
   }
 

@@ -52,10 +52,13 @@ export default function CharactersList() {
 
         setCharacters((prev) => (isLoadMore ? [...prev, ...marked] : marked));
         setNextPageUrl(data.info?.next || null);
-      } catch (err: any) {
-        console.error(err);
-        setError(err.message);
-        if (!isLoadMore) setCharacters([]);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          console.error(err);
+          setError(err.message);
+        } else {
+          setError("Unknown error");
+        }
       } finally {
         setLoading(false);
       }
@@ -66,10 +69,11 @@ export default function CharactersList() {
   useEffect(() => {
     setCharacters([]);
     fetchCharacters();
-  }, [location.search, userId]);
+  }, [location.search, userId, fetchCharacters]);
 
   useEffect(() => {
-    if (!observerRef.current || !nextPageUrl || loading) return;
+    const target = observerRef.current;
+    if (!target || !nextPageUrl || loading) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -82,10 +86,10 @@ export default function CharactersList() {
       }
     );
 
-    observer.observe(observerRef.current);
+    observer.observe(target);
 
     return () => {
-      if (observerRef.current) observer.unobserve(observerRef.current);
+      if (target) observer.unobserve(target);
     };
   }, [nextPageUrl, loading, fetchCharacters]);
 

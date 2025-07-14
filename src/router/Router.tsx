@@ -7,6 +7,7 @@ import { SignIn } from "../pages/SignIn";
 import { SignUp } from "../pages/SignUp";
 import Favorites from "../pages/Favorites";
 import { TagPage } from "../pages/TagPage";
+import CharacterDetail from "../pages/CharacterDetail";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
       {
         path: "/tag",
         element: <TagPage />,
+      },
+      {
+        path: "/characters/:id",
+        element: <CharacterDetail />,
       },
     ],
   },
