@@ -123,6 +123,7 @@ export default function Tag({ tagSize = 4 }: { tagSize?: number }) {
     let prev;
     let cur;
     const arr = doublerArraytoArray(mas);
+    if (arr[arr.length - 1] !== null) return false;
     for (let i = 0; i < arr.length; i++) {
       if (i == arr.length - 1) return true;
       prev = cur;
@@ -188,7 +189,6 @@ export default function Tag({ tagSize = 4 }: { tagSize?: number }) {
           Reset
         </button>
         <div className="mb-4 px-4 py-2"> Moves: {moves}</div>
-        {win && <div className="mb-4 px-4 py-2"> Win</div>}
       </div>
 
       <div className={win ? "opacity-70" : ""}>
@@ -223,27 +223,8 @@ export default function Tag({ tagSize = 4 }: { tagSize?: number }) {
             );
           })}
         </div>
-
-        {/* <table className="border-collapse border border-gray-400">
-          <tbody>
-            {mas.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                {row.map((cell, colIndex) => (
-                  <td
-                    key={colIndex}
-                    className={`w-12 h-12 border border-gray-400 text-center align-middle ${
-                      cell && "cursor-pointer"
-                    }`}
-                    onClick={() => handleClick(rowIndex, colIndex)}
-                  >
-                    {cell ?? ""}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table> */}
       </div>
+      {win && <div className="mb-4 px-4 py-2 text-center"> Win</div>}
     </div>
   );
 }
