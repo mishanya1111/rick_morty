@@ -5,6 +5,8 @@ import { RouterProvider, createMemoryRouter } from "react-router-dom";
 import { characterMockResponses, mockData } from "../constants/mocks";
 import * as authStore from "../store/authStore";
 import { routes } from "../router/Router";
+import type { Character } from "../constants/types";
+import { URL_CHARACTER } from "../constants/URL";
 
 const mockedUserId = "user-123";
 // Мокаем zustand store
@@ -25,7 +27,18 @@ beforeEach(() => {
     if (typeof url !== "string") {
       return Promise.reject(new Error("Invalid URL"));
     }
+    const ids = url.startsWith(URL_CHARACTER) && url.replace(URL_CHARACTER, "");
 
+    if (ids && /^\d+(,\d+)*$/.test(ids)) {
+      const selectedIds = ids.split(",").map(Number);
+      const result = (mockData["details_Characters"] as Character[]).filter(
+        (char) => selectedIds.includes(char.id)
+      );
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(result.length === 1 ? result[0] : result),
+      } as Response);
+    }
     const key = characterMockResponses[url];
     //
     if (key && mockData[key]) {
@@ -103,5 +116,20 @@ describe("Favorites interaction flow", () => {
       const favoriteCards = screen.getAllByTestId("character-card");
       expect(favoriteCards.length).toBe(3);
     });
+
+    for (let i = 0; i < 3; i++) {
+      const buttons = await screen.findAllByRole("button", {
+        name: /in Favorite/i,
+      });
+
+      await userEvent.click(buttons[0]); // каждый раз обновляется список, кликаем по первому
+      await waitFor(() => {
+        const currentCards = screen.queryAllByTestId("character-card");
+        expect(currentCards.length).toBe(2 - i); // 3 → 2 → 1 → 0
+      });
+    }
+
+    // Проверка на отсутствие избранного
+    await screen.findByText(/no favorites yet/i);
   });
 });
