@@ -4,11 +4,11 @@ import History from "../pages/History";
 import { SignIn } from "../pages/SignIn";
 import { SignUp } from "../pages/SignUp";
 import Favorites from "../pages/Favorites";
-import { TagPage } from "../pages/TagPage";
+import TagPage from "../pages/TagPage";
 import CharacterDetail from "../pages/CharacterDetail";
 import Home from "../pages/Home";
 
-const router = createBrowserRouter([
+export const routes = [
   {
     path: "",
     //errorElement: <ErrorPage />,
@@ -44,7 +44,8 @@ const router = createBrowserRouter([
       },
     ],
   },
-]);
+];
+const router = createBrowserRouter(routes);
 
 export default function AppRouter() {
   return <RouterProvider router={router} />;

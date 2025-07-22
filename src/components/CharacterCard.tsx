@@ -30,7 +30,10 @@ export default function CharacterCard({
   };
 
   return (
-    <div className="border rounded-xl shadow p-4 flex flex-col items-center gap-2 relative">
+    <div
+      className="border rounded-xl shadow p-4 flex flex-col items-center gap-2 relative"
+      data-testid="character-card"
+    >
       {buttonVisibility && (
         <button
           onClick={handleFavoriteClick}
@@ -38,7 +41,7 @@ export default function CharacterCard({
         >
           <img
             src={fav ? heartFilled : hearth}
-            alt="значок избранного"
+            alt={fav ? "in Favorite" : "not in Favorite"}
             className="w-6 h-6"
           />
         </button>

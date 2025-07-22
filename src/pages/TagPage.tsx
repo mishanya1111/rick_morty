@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Tag from "./Tag";
+import Tag from "../components/Tag";
 
-export function TagPage() {
+export default function TagPage() {
   const [len, setLen] = useState(4);
   const [tagSize, setTagSize] = useState(4);
 
@@ -17,6 +17,7 @@ export function TagPage() {
           type="number"
           onChange={(e) => setLen(Number(e.target.value))}
           value={len}
+          min={2}
           id="input-len"
         />
       </form>

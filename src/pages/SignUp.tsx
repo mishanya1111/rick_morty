@@ -78,8 +78,6 @@ export function SignUp() {
   });
 
   const onSubmit = (data: FormData) => {
-    console.log("Данные отправлены:", data);
-
     const users = JSON.parse(localStorage.getItem("users") || "{}");
     const id = generateId();
     users[data.email] = { id, password: data.password, name: data.name };

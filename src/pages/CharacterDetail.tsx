@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
 import { isFavorite, toggleFavorite } from "../utils/favorites";
-import heart from "../assets/heart.png";
+import hearth from "../assets/heart.png";
 import heartFilled from "../assets/heart-filled.png";
 import { URL_CHARACTER } from "../constants/URL";
 import type { HistoryRecord } from "./History";
@@ -76,8 +76,8 @@ export default function CharacterDetail() {
           className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:text-accent-foreground h-9 w-9 absolute z-10 top-5 right-5 rounded-full text-red-500 transition-all hover:bg-red-500/10 active:bg-red-500/30"
         >
           <img
-            src={fav ? heartFilled : heart}
-            alt="значок избранного"
+            src={fav ? heartFilled : hearth}
+            alt={fav ? "in Favorite" : "not in Favorite"}
             className="w-6 h-6"
           />
         </button>

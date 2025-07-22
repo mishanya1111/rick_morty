@@ -100,6 +100,7 @@ export default function CharactersList() {
       {error && <p className="text-red-500">Sorry... We found nothing. :(</p>}
 
       <div
+        data-testid="character-list"
         className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ${
           loading ? "opacity-50" : ""
         }`}
@@ -113,9 +114,7 @@ export default function CharactersList() {
           />
         ))}
       </div>
-
       {loading && <p className="text-center my-4">Loading...</p>}
-
       <div ref={observerRef} className="h-1" />
     </div>
   );

@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Outlet, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const statusOptions = ["alive", "dead", "unknown"];
 const genderOptions = ["female", "male", "genderless", "unknown"];
@@ -82,8 +82,6 @@ export default function Filters() {
           ))}
         </select>
       </div>
-
-      <Outlet />
     </>
   );
 }
