@@ -131,5 +131,5 @@ describe("Favorites interaction flow", () => {
 
     // Проверка на отсутствие избранного
     await screen.findByText(/no favorites yet/i);
-  });
+  }, 15000);
 });

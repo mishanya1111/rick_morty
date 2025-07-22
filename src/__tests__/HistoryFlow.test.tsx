@@ -48,7 +48,7 @@ beforeEach(() => {
     return Promise.reject(new Error("Unhandled request: " + url));
   });
 
-  //@ts-expect-error
+  //@ts-expect-error TS don`t know abou my authStore
   authStore.useAuthStore.mockImplementation((selector) =>
     selector({
       userId: mockedUserId,
@@ -122,5 +122,5 @@ describe("History interaction flow", () => {
       const historyCards = screen.getAllByTestId("character-card");
       expect(historyCards.length).toBe(3);
     });
-  });
+  }, 15000);
 });

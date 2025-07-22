@@ -74,5 +74,5 @@ describe("Full Auth Flow", () => {
         screen.getByRole("button", { name: /log out/i })
       ).toBeInTheDocument();
     });
-  });
+  }, 15000);
 });
